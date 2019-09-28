@@ -1,0 +1,10 @@
+C:\Users\Deepak\Desktop\Project iDli\iDli_P1\iDli_P1\bin\Debug\iDli_P1.exe.config
+C:\Users\Deepak\Desktop\Project iDli\iDli_P1\iDli_P1\bin\Debug\iDli_P1.exe
+C:\Users\Deepak\Desktop\Project iDli\iDli_P1\iDli_P1\bin\Debug\iDli_P1.pdb
+C:\Users\Deepak\Desktop\Project iDli\iDli_P1\iDli_P1\obj\Debug\iDli_P1.Form1.resources
+C:\Users\Deepak\Desktop\Project iDli\iDli_P1\iDli_P1\obj\Debug\iDli_P1.Properties.Resources.resources
+C:\Users\Deepak\Desktop\Project iDli\iDli_P1\iDli_P1\obj\Debug\iDli_P1.csproj.GenerateResource.Cache
+C:\Users\Deepak\Desktop\Project iDli\iDli_P1\iDli_P1\obj\Debug\iDli_P1.csproj.CoreCompileInputs.cache
+C:\Users\Deepak\Desktop\Project iDli\iDli_P1\iDli_P1\obj\Debug\iDli_P1.exe
+C:\Users\Deepak\Desktop\Project iDli\iDli_P1\iDli_P1\obj\Debug\iDli_P1.pdb
+C:\Users\Deepak\Desktop\Project iDli\iDli_P1\iDli_P1\obj\Debug\iDli_P1.csprojResolveAssemblyReference.cache

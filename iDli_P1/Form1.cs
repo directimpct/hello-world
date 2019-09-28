@@ -119,6 +119,12 @@ namespace iDli_P1
                 NewelementDB[0, i].node[0] = Convert.ToInt32(temp.Substring(0, temp.Length - 7));
                 temp = node.Attributes.GetNamedItem("TO_NODE").Value;
                 NewelementDB[0, i].node[1] = Convert.ToInt32(temp.Substring(0, temp.Length - 7));
+                if (node.SelectSingleNode("BEND") != null)
+                {
+                    temp = node.SelectSingleNode("BEND").Attributes.GetNamedItem("NODE1").Value;
+                    NewelementDB[0, i].bend_node = Convert.ToInt32(temp.Substring(0, temp.Length - 7));
+                    NewelementDB[0, i].bend = true;
+                } 
                 temp = node.Attributes.GetNamedItem("DIAMETER").Value;
                 if (temp == "-1.010100")
                     temp = tdia;
@@ -144,7 +150,7 @@ namespace iDli_P1
                     temp = "0.000000";
                 NewelementDB[0, i].Zdir = Convert.ToDouble(temp.Substring(0, temp.Length - 4));
 
-                //Console.WriteLine(NewelementDB[0, i].node[0] + " " + NewelementDB[0, i].node[1] + " " + NewelementDB[0, i].pipeOD + " " + NewelementDB[0, i].pipeTHK + " " + NewelementDB[0, i].Xdir + " " + NewelementDB[0, i].Ydir + " " + NewelementDB[0, i].Zdir);
+                //Console.WriteLine(NewelementDB[0, i].node[0] + " " + NewelementDB[0, i].node[1] + " " + NewelementDB[0, i].pipeOD + " " + NewelementDB[0, i].pipeTHK + " " + NewelementDB[0, i].Xdir + " " + NewelementDB[0, i].Ydir + " " + NewelementDB[0, i].Zdir + " Bend node is " + NewelementDB[0,i].bend_node);
                 i++;
             }
         }
@@ -223,13 +229,14 @@ namespace iDli_P1
             int bcounter = 0;
             int tbcounter = 0;
             bool toggle_var = true;
+            bool flag = true;
             i = 0;
             temp_node = start_node;
             //MessageBox.Show(Convert.ToString(listBox1.Items.Count));
             while (counter < listBox1.Items.Count) // figure while thingie
             {
                     index = Searchelement(temp_node, NewelementDB,0);
-                if(index == 666) //I know you are going to forget this part ... again
+                if(index == 121088) //I know you are going to forget this part ... again
                 {
                     counter--; // what this fellow does is that whenever it meets a dead end with no options left to go on either sides, it will wipe the entire loop clean and add the previous branch node to the block list and re run the loop
                     for (int k = counter; k < bcounter; k++)
@@ -251,7 +258,22 @@ namespace iDli_P1
                     index = Searchelement(temp_node, NewelementDB, 0);
 
                 }
+                if (i==0 || flag)
+                {
                     NewelementDB[counter, i] = NewelementDB[0, Math.Abs(index)];
+                    flag = false;
+                }
+                else if(NewelementDB[0, Math.Abs(index)].bend == true || Searchteenode(temp_node, ref teenodes))
+                {
+                    i--;
+                    NewelementDB[counter, i] = NewelementDB[counter, i] + NewelementDB[0, Math.Abs(index)];
+                    flag = true;
+                }
+                else
+                {
+                    i--;
+                    NewelementDB[counter, i] = NewelementDB[counter, i] + NewelementDB[0, Math.Abs(index)]; 
+                }
                 //Console.WriteLine(Convert.ToString(index));
                 //Console.WriteLine(NewelementDB[counter, i].node[0]);
                 // Console.WriteLine(Convert.ToString(i));
@@ -262,10 +284,15 @@ namespace iDli_P1
                     {
                     NewelementDB[counter, i].loop_dir = !toggle_var;
                         temp_node = NewelementDB[0, Math.Abs(index)].node[0];
-                        i++;
+                    
+
                     branches[bcounter, 1] = old_temp;
                     branches[bcounter, 0] = temp_node;
-                    if(Searchteenode(temp_node, ref teenodes) || Searchteenode(old_temp, ref teenodes))
+                     //if (NewelementDB[0, Math.Abs(index)].bend == true || Searchteenode(temp_node, ref teenodes) || Searchteenode(old_temp, ref teenodes))
+                    
+                        i++;
+
+                    if (Searchteenode(temp_node, ref teenodes) || Searchteenode(old_temp, ref teenodes))
                     {
                         Ptempbranch[1] = tempbranch[1];
                         Ptempbranch[0] = tempbranch[0];
@@ -315,18 +342,20 @@ namespace iDli_P1
                     i = 0;
                     temp_node = start_node;
                     
-                    Console.WriteLine("reset has happened heressssssssssssssss");
+                    //Console.WriteLine("reset has happened heressssssssssssssss");
 
 
                 }
             }
             int u = 0;
-            for (int v = 1; v < 2; v++)
+            for (int v = 1; v <= 5; v++)
 
 
             {
-                for (u = 0; NewelementDB[v, u].node[0] != 0; u++) 
-                Console.WriteLine("Loop No." + v+ " is from node " + NewelementDB[v, u].node[0] + " to node " + NewelementDB[v, u].node[1] + "  direct " + NewelementDB[v, u].loop_dir);
+                for (u = 0; NewelementDB[v, u].node[0] != 0; u++)
+                    Console.WriteLine("Loop No." + v+ " is from node " + NewelementDB[v, u].node[0] + " to node " + NewelementDB[v, u].node[1]);
+
+                    //Console.WriteLine("Loop No." + v+ " is from node " + NewelementDB[v, u].node[0] + " to node " + NewelementDB[v, u].node[1] + "  direct " + NewelementDB[v, u].loop_dir);
             }
 
         }
@@ -420,8 +449,8 @@ namespace iDli_P1
                 flag = 0;
                 }
             //}
-            Console.WriteLine("i shouldnt be heresdfgvgggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg");
-            return 666;
+            //Console.WriteLine("i shouldnt be heresdfgvgggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg");
+            return 121088;
         }
 
         private void button3_Click(object sender, EventArgs e)
